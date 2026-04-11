@@ -1,0 +1,139 @@
+.gasoil-container {
+  padding: 1.25rem 1rem 2rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ── Header ── */
+.gasoil-header {
+  text-align: center;
+  margin-bottom: 1.25rem;
+}
+
+.gasoil-titulo {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0;
+}
+
+.gasoil-anio {
+  font-size: 1rem;
+  color: var(--bs-secondary);
+}
+
+/* ── Fila de acciones ── */
+.acciones-row {
+  display: flex;
+  gap: 0.6rem;
+  margin-bottom: 1.25rem;
+}
+
+/* ── Botón CARGA ── */
+.btn-carga {
+  flex: 1;
+  padding: 0.65rem 1rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  background: transparent;
+  color: var(--bs-success);
+  border: 2px solid var(--bs-success);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.btn-carga:hover,
+.btn-carga:active {
+  background: var(--bs-success);
+  color: #fff;
+}
+
+/* ── Botón AÑO ── */
+.btn-anio {
+  padding: 0.65rem 1rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  background: transparent;
+  color: var(--bs-info);
+  border: 2px solid var(--bs-info);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.btn-anio:hover,
+.btn-anio:active {
+  background: var(--bs-info);
+  color: #fff;
+}
+
+/* ── Grid de meses ── */
+.meses-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.6rem;
+}
+
+@media (min-width: 480px) {
+  .meses-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 768px) {
+  .meses-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ── Tarjeta de mes ── */
+.mes-card {
+  background: #2a2a2a;
+  border: 1px solid #444;
+  border-radius: 0.5rem;
+  padding: 0.75rem 0.5rem;
+  text-align: center;
+}
+
+.mes-card.mes-actual {
+  border-color: var(--bs-primary);
+  box-shadow: 0 0 0 1px var(--bs-primary);
+}
+
+.mes-nombre {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--bs-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.3rem;
+}
+
+.mes-litros {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 0.3rem;
+}
+
+.mes-saldo {
+  font-size: 0.75rem;
+  color: var(--bs-success);
+}
+
+.mes-saldo.saldo-negativo {
+  color: var(--bs-danger);
+}
+
+/* ── SweetAlert dark ── */
+.swal-dark {
+  background: var(--bs-dark) !important;
+  color: var(--bs-light) !important;
+}
+
+.swal-dark .swal2-title,
+.swal-dark .swal2-html-container {
+  color: var(--bs-light) !important;
+}
