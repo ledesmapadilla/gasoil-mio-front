@@ -53,14 +53,14 @@ const CargaModal = ({ show, onHide, onGuardar }) => {
 };
 
 const s = {
-  overlay: { position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 9999, padding: "1rem" },
+  overlay: { position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 9999, padding: "0.5rem" },
   modal: { background: "#1e1e1e", border: "1px solid #444", borderRadius: "0.5rem", width: "100%", maxWidth: "480px", color: "#fff" },
   header: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0.75rem 1rem", borderBottom: "1px solid #444" },
   titulo: { fontWeight: 700, fontSize: "1.1rem" },
   btnX: { background: "none", border: "none", color: "#aaa", fontSize: "1.1rem", cursor: "pointer" },
   body: { padding: "1rem", display: "flex", flexDirection: "column" },
-  label: { fontSize: "0.85rem", color: "#aaa", marginBottom: "0.3rem" },
-  input: { padding: "0.5rem", background: "#111", color: "#fff", border: "1px solid #555", borderRadius: "0.375rem", fontSize: "1rem", width: "100%" },
+  label: { fontSize: "1rem", color: "#aaa", marginBottom: "0.4rem" },
+  input: { padding: "0.75rem", background: "#111", color: "#fff", border: "1px solid #555", borderRadius: "0.375rem", fontSize: "1.1rem", width: "100%" },
   footer: { display: "flex", justifyContent: "flex-end", gap: "0.5rem", padding: "0.75rem 1rem", borderTop: "1px solid #444" },
   btnCancelar: { background: "transparent", border: "1px solid #666", color: "#aaa", padding: "0.4rem 1rem", borderRadius: "0.375rem", cursor: "pointer" },
   btnGuardar: { background: "transparent", border: "1px solid #198754", color: "#198754", padding: "0.4rem 1rem", borderRadius: "0.375rem", cursor: "pointer", fontWeight: 600 },

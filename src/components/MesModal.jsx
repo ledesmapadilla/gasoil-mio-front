@@ -166,7 +166,7 @@ const estilos = {
     background: "rgba(0,0,0,0.7)",
     display: "flex", alignItems: "center", justifyContent: "center",
     zIndex: 9999,
-    padding: "1rem",
+    padding: "0.5rem",
   },
   modal: {
     background: "#1e1e1e",
@@ -192,8 +192,8 @@ const estilos = {
     display: "flex", justifyContent: "flex-end",
   },
   tabla: { width: "100%", borderCollapse: "collapse" },
-  th: { padding: "0.4rem 0.5rem", background: "#2a2a2a", textAlign: "center", fontSize: "0.85rem", borderBottom: "1px solid #444" },
-  td: { padding: "0.4rem 0.5rem", textAlign: "center", fontSize: "0.85rem", borderBottom: "1px solid #333" },
+  th: { padding: "0.6rem 0.5rem", background: "#2a2a2a", textAlign: "center", fontSize: "1rem", borderBottom: "1px solid #444" },
+  td: { padding: "0.6rem 0.5rem", textAlign: "center", fontSize: "1rem", borderBottom: "1px solid #333" },
   inputInline: {
     width: "75px", padding: "0.2rem 0.4rem",
     background: "#111", color: "#fff",
