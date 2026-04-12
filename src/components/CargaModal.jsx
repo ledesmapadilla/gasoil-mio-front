@@ -54,7 +54,7 @@ const CargaModal = ({ show, onHide, onGuardar }) => {
 
 const s = {
   overlay: { position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 9999, padding: "1rem" },
-  modal: { background: "#1e1e1e", border: "1px solid #444", borderRadius: "0.5rem", width: "100%", maxWidth: "360px", color: "#fff" },
+  modal: { background: "#1e1e1e", border: "1px solid #444", borderRadius: "0.5rem", width: "100%", maxWidth: "480px", color: "#fff" },
   header: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0.75rem 1rem", borderBottom: "1px solid #444" },
   titulo: { fontWeight: 700, fontSize: "1.1rem" },
   btnX: { background: "none", border: "none", color: "#aaa", fontSize: "1.1rem", cursor: "pointer" },

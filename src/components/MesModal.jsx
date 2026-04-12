@@ -173,7 +173,7 @@ const estilos = {
     border: "1px solid #444",
     borderRadius: "0.5rem",
     width: "100%",
-    maxWidth: "480px",
+    maxWidth: "560px",
     maxHeight: "85vh",
     display: "flex",
     flexDirection: "column",
