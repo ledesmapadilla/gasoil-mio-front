@@ -27,6 +27,11 @@ const Inicio = () => {
   });
   const mesActual = new Date().getMonth();
 
+  useEffect(() => {
+    document.body.style.overflow = vista === "inicio" ? "hidden" : "auto";
+    return () => { document.body.style.overflow = ""; };
+  }, [vista]);
+
   const getCupo = (i) => cupos[`${anio}-${i}`] ?? 140;
 
   const actualizarCupo = (i, val) => {
