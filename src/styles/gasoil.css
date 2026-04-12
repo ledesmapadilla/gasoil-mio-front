@@ -110,13 +110,24 @@ body {
   margin-top: 0.5rem;
 }
 
-.mes-btn-ver, .mes-btn-editar {
+.mes-btn-ver {
   background: transparent;
   border-radius: 0.375rem;
   padding: 0.2rem 0.5rem;
   font-size: 0.85rem;
   cursor: pointer;
-  border: 1px solid #555;
+  border: 1px solid var(--c-info);
+  color: var(--c-info);
+}
+
+.mes-btn-editar {
+  background: transparent;
+  border-radius: 0.375rem;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  border: 1px solid var(--c-warning);
+  color: var(--c-warning);
 }
 
 /* ── Sin flechitas en inputs numéricos ── */
