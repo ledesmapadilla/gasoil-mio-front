@@ -63,7 +63,12 @@ const Inicio = () => {
       confirmButtonText: "Ver",
       showCancelButton: true,
       cancelButtonText: "Cancelar",
-      customClass: { popup: "swal-dark" },
+      customClass: {
+        popup: "swal-dark",
+        confirmButton: "swal-btn-outline-success",
+        cancelButton: "swal-btn-outline-secondary",
+      },
+      buttonsStyling: false,
     });
     if (!isDismissed && value) setAnio(parseInt(value));
   };
