@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { borrarCarga, editarCarga } from "../helpers/queriesCargas";
 import Swal from "sweetalert2";
 
@@ -17,6 +17,11 @@ const MesModal = ({ show, onHide, mes, anio, cargas, modoEditar, cupo, onEditarC
   const [litrosPorId, setLitrosPorId] = useState({});
   const [editandoCupo, setEditandoCupo] = useState(false);
   const [cupoEditando, setCupoEditando] = useState("");
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = ""; };
+  }, []);
 
   if (!show) return null;
 

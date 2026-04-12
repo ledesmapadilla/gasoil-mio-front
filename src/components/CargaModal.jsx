@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { crearCarga } from "../helpers/queriesCargas";
 import Swal from "sweetalert2";
 
@@ -7,6 +7,11 @@ const hoy = () => new Date().toISOString().split("T")[0];
 const CargaModal = ({ show, onHide, onGuardar }) => {
   const [fecha, setFecha] = useState(hoy());
   const [litros, setLitros] = useState("");
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = ""; };
+  }, []);
 
   if (!show) return null;
 
