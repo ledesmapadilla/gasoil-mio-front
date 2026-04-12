@@ -31,7 +31,7 @@ const CargaModal = ({ show, onHide, onGuardar }) => {
         </div>
         <div style={s.body}>
           <label style={s.label}>Fecha</label>
-          <input type="date" value={fecha} onChange={(e) => setFecha(e.target.value)} style={s.input} />
+          <input type="date" value={fecha} max={hoy()} onChange={(e) => setFecha(e.target.value)} style={s.input} />
           <label style={{ ...s.label, marginTop: "0.75rem" }}>Litros</label>
           <input
             type="number"
