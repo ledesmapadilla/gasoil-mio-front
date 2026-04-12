@@ -127,6 +127,61 @@
   color: var(--bs-danger);
 }
 
+/* ── Botones de la tarjeta ── */
+.mes-botones {
+  display: flex;
+  justify-content: center;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+}
+
+.mes-btn-ver,
+.mes-btn-editar {
+  background: transparent;
+  border-radius: 0.375rem;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.mes-btn-ver {
+  color: var(--bs-info);
+  border: 1px solid var(--bs-info);
+}
+
+.mes-btn-ver:hover,
+.mes-btn-ver:active {
+  background: var(--bs-info);
+  color: #fff;
+}
+
+.mes-btn-editar {
+  color: var(--bs-warning);
+  border: 1px solid var(--bs-warning);
+}
+
+.mes-btn-editar:hover,
+.mes-btn-editar:active {
+  background: var(--bs-warning);
+  color: #000;
+}
+
+/* ── Sin flechitas en inputs numéricos ── */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* ── SweetAlert por encima del modal custom ── */
+.swal2-container {
+  z-index: 99999 !important;
+}
+
 /* ── SweetAlert dark ── */
 .swal-dark {
   background: var(--bs-dark) !important;

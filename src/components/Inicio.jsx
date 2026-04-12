@@ -1,14 +1,13 @@
 import { useState, useEffect } from "react";
 import { listarCargas } from "../helpers/queriesCargas";
 import CargaModal from "./CargaModal";
+import MesModal from "./MesModal";
 import Swal from "sweetalert2";
 
 const MESES = [
   "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
   "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre",
 ];
-
-const CUOTA = 140;
 
 const formatLitros = (n) => {
   if (n === 0) return "-";
@@ -19,7 +18,22 @@ const Inicio = () => {
   const [cargas, setCargas] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [anio, setAnio] = useState(new Date().getFullYear());
+  const [mesModal, setMesModal] = useState(null);
+  const [modoEditar, setModoEditar] = useState(false);
+  const [cupos, setCupos] = useState(() => {
+    const stored = localStorage.getItem("gasoil-cupos");
+    return stored ? JSON.parse(stored) : {};
+  });
   const mesActual = new Date().getMonth();
+
+  const getCupo = (mesIndex) => cupos[`${anio}-${mesIndex}`] ?? 140;
+
+  const actualizarCupo = (mesIndex, nuevoCupo) => {
+    const key = `${anio}-${mesIndex}`;
+    const nuevos = { ...cupos, [key]: nuevoCupo };
+    localStorage.setItem("gasoil-cupos", JSON.stringify(nuevos));
+    setCupos(nuevos);
+  };
 
   const cargarDatos = async () => {
     const resp = await listarCargas();
@@ -33,14 +47,22 @@ const Inicio = () => {
     cargarDatos();
   }, []);
 
-  const getResumenMes = (mesIndex) => {
-    const cargasMes = cargas.filter((c) => {
+  const getCargasMes = (mesIndex) =>
+    cargas.filter((c) => {
       const [anioC, mesC] = c.fecha.split("-");
       return parseInt(anioC) === anio && parseInt(mesC) - 1 === mesIndex;
     });
+
+  const getResumenMes = (mesIndex) => {
+    const cargasMes = getCargasMes(mesIndex);
     const total = cargasMes.reduce((sum, c) => sum + c.litros, 0);
-    const saldo = CUOTA - total;
+    const saldo = getCupo(mesIndex) - total;
     return { total, saldo };
+  };
+
+  const abrirMes = (i, editar) => {
+    setMesModal(i);
+    setModoEditar(editar);
   };
 
   const cambiarAnio = async () => {
@@ -82,6 +104,14 @@ const Inicio = () => {
               <div className={`mes-saldo${saldoNegativo ? " saldo-negativo" : ""}`}>
                 Saldo: {saldo}
               </div>
+              <div className="mes-botones">
+                <button className="mes-btn-ver" onClick={() => abrirMes(i, false)}>
+                  <i className="bi bi-eye"></i>
+                </button>
+                <button className="mes-btn-editar" onClick={() => abrirMes(i, true)}>
+                  <i className="bi bi-pencil"></i>
+                </button>
+              </div>
             </div>
           );
         })}
@@ -95,6 +125,20 @@ const Inicio = () => {
             setShowModal(false);
             cargarDatos();
           }}
+        />
+      )}
+
+      {mesModal !== null && (
+        <MesModal
+          show={mesModal !== null}
+          onHide={() => setMesModal(null)}
+          mes={mesModal}
+          anio={anio}
+          cargas={getCargasMes(mesModal)}
+          modoEditar={modoEditar}
+          cupo={getCupo(mesModal)}
+          onEditarCupo={(valor) => actualizarCupo(mesModal, valor)}
+          onActualizar={cargarDatos}
         />
       )}
     </div>

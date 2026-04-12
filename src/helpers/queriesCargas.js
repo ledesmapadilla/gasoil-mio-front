@@ -24,6 +24,20 @@ export const crearCarga = async (carga) => {
   }
 };
 
+export const editarCarga = async (id, carga) => {
+  try {
+    const respuesta = await fetch(`${API_CARGAS}/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(carga),
+    });
+    return respuesta;
+  } catch (error) {
+    console.error("Error al editar carga:", error);
+    return null;
+  }
+};
+
 export const borrarCarga = async (id) => {
   try {
     const respuesta = await fetch(`${API_CARGAS}/${id}`, {
