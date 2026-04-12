@@ -1,4 +1,8 @@
-const API_CARGAS = `${import.meta.env.VITE_API_URL}/api/cargas`;
+const BASE_URL = import.meta.env.PROD
+  ? `https://${import.meta.env.VITE_API_PRODUCCION}`
+  : import.meta.env.VITE_API_URL;
+
+const API_CARGAS = `${BASE_URL}/api/cargas`;
 
 export const listarCargas = async () => {
   try {
