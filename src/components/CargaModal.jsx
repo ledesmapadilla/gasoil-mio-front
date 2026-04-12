@@ -2,10 +2,37 @@ import { useState, useEffect } from "react";
 import { crearCarga } from "../helpers/queriesCargas";
 import Swal from "sweetalert2";
 
-const hoy = () => new Date().toISOString().split("T")[0];
+// YYYY-MM-DD → DD/MM/AAAA
+const hoyTexto = () => {
+  const h = new Date();
+  const d = String(h.getDate()).padStart(2, "0");
+  const m = String(h.getMonth() + 1).padStart(2, "0");
+  return `${d}/${m}/${h.getFullYear()}`;
+};
+
+// DD/MM/AAAA → YYYY-MM-DD
+const textoAiso = (t) => {
+  const [d, m, a] = t.split("/");
+  return `${a}-${m}-${d}`;
+};
+
+const fechaValida = (t) => {
+  if (!/^\d{2}\/\d{2}\/\d{4}$/.test(t)) return false;
+  const [d, m, a] = t.split("/").map(Number);
+  const f = new Date(a, m - 1, d);
+  if (f > new Date()) return false;
+  return f.getFullYear() === a && f.getMonth() === m - 1 && f.getDate() === d;
+};
+
+const formatearFechaInput = (val) => {
+  const nums = val.replace(/\D/g, "").slice(0, 8);
+  if (nums.length <= 2) return nums;
+  if (nums.length <= 4) return `${nums.slice(0, 2)}/${nums.slice(2)}`;
+  return `${nums.slice(0, 2)}/${nums.slice(2, 4)}/${nums.slice(4)}`;
+};
 
 const CargaModal = ({ show, onHide, onGuardar }) => {
-  const [fecha, setFecha] = useState(hoy());
+  const [fecha, setFecha] = useState(hoyTexto());
   const [litros, setLitros] = useState("");
 
   useEffect(() => {
@@ -16,13 +43,17 @@ const CargaModal = ({ show, onHide, onGuardar }) => {
   if (!show) return null;
 
   const handleGuardar = async () => {
+    if (!fechaValida(fecha)) {
+      Swal.fire({ title: "Fecha inválida", text: "Usá el formato DD/MM/AAAA", icon: "error", customClass: { popup: "swal-dark" }, confirmButtonText: "OK" });
+      return;
+    }
     const l = parseFloat(litros);
     if (!l || l <= 0) return;
-    const resp = await crearCarga({ fecha, litros: l });
+    const resp = await crearCarga({ fecha: textoAiso(fecha), litros: l });
     if (resp?.ok) {
       Swal.fire({ icon: "success", title: "Carga registrada", timer: 1200, showConfirmButton: false, customClass: { popup: "swal-dark" } });
       setLitros("");
-      setFecha(hoy());
+      setFecha(hoyTexto());
       onGuardar();
     }
   };
@@ -36,10 +67,18 @@ const CargaModal = ({ show, onHide, onGuardar }) => {
         </div>
         <div style={s.body}>
           <label style={s.label}>Fecha</label>
-          <input type="date" value={fecha} max={hoy()} onChange={(e) => setFecha(e.target.value)} style={s.input} />
+          <input
+            type="text"
+            inputMode="numeric"
+            value={fecha}
+            onChange={(e) => setFecha(formatearFechaInput(e.target.value))}
+            onKeyDown={(e) => { if (e.key === "Enter") handleGuardar(); }}
+            placeholder="DD/MM/AAAA"
+            style={s.input}
+          />
           <label style={{ ...s.label, marginTop: "0.75rem" }}>Litros</label>
           <input
-            type="number"
+            type="text"
             inputMode="decimal"
             value={litros}
             onChange={(e) => setLitros(e.target.value)}
