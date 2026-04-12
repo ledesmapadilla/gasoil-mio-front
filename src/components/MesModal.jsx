@@ -195,10 +195,10 @@ const estilos = {
   th: { padding: "0.75rem 0.5rem", background: "#2a2a2a", textAlign: "center", fontSize: "1.1rem", borderBottom: "1px solid #444" },
   td: { padding: "0.75rem 0.5rem", textAlign: "center", fontSize: "1.1rem", borderBottom: "1px solid #333" },
   inputInline: {
-    width: "90px", padding: "0.35rem 0.5rem",
+    width: "110px", padding: "0.45rem 0.6rem",
     background: "#111", color: "#fff",
     border: "1px solid #666", borderRadius: "0.375rem",
-    fontSize: "1rem",
+    fontSize: "1.1rem",
   },
   inputTabla: {
     width: "90px", padding: "0.35rem 0.4rem",
