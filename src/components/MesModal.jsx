@@ -77,35 +77,33 @@ const MesModal = ({ show, onHide, mes, anio, cargas, modoEditar, cupo, onEditarC
 
         {/* Header */}
         <div style={estilos.header}>
-          <span style={estilos.titulo}>{titulo}</span>
-          <button style={estilos.btnCerrarX} onClick={onHide}>✕</button>
-        </div>
-
-        {/* Cupo editable */}
-        {modoEditar && (
-          <div style={estilos.cupoRow}>
-            {editandoCupo ? (
-              <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", width: "100%" }}>
-                <span style={{ fontSize: "1.1rem", color: "#aaa" }}>Cupo:</span>
-                <input
-                  type="text"
-                  inputMode="numeric"
-                  autoFocus
-                  value={cupoEditando}
-                  onChange={(e) => setCupoEditando(e.target.value)}
-                  onKeyDown={(e) => { if (e.key === "Enter") guardarCupo(); if (e.key === "Escape") setEditandoCupo(false); }}
-                  style={estilos.inputInline}
-                />
-                <button style={estilos.btnVerde} onClick={guardarCupo}>✓</button>
-                <button style={estilos.btnGris} onClick={() => setEditandoCupo(false)}>✕</button>
-              </div>
-            ) : (
-              <button style={estilos.btnCupo} onClick={() => { setCupoEditando(String(cupo)); setEditandoCupo(true); }}>
-                Cupo: {cupo} ✏️
-              </button>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flexWrap: "wrap" }}>
+            <span style={estilos.titulo}>{titulo}</span>
+            {modoEditar && (
+              editandoCupo ? (
+                <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                  <span style={{ fontSize: "0.8rem" }}>Cupo:</span>
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    autoFocus
+                    value={cupoEditando}
+                    onChange={(e) => setCupoEditando(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === "Enter") guardarCupo(); if (e.key === "Escape") setEditandoCupo(false); }}
+                    style={estilos.inputInline}
+                  />
+                  <button style={estilos.btnVerde} onClick={guardarCupo}>✓</button>
+                  <button style={estilos.btnGris} onClick={() => setEditandoCupo(false)}>✕</button>
+                </div>
+              ) : (
+                <button style={estilos.btnCupo} onClick={() => { setCupoEditando(String(cupo)); setEditandoCupo(true); }}>
+                  Cupo: {cupo} ✏️
+                </button>
+              )
             )}
           </div>
-        )}
+          <button style={estilos.btnCerrarX} onClick={onHide}>✕</button>
+        </div>
 
         {/* Body */}
         <div style={estilos.body}>
@@ -196,17 +194,11 @@ const estilos = {
   tabla: { width: "100%", borderCollapse: "collapse" },
   th: { padding: "0.75rem 0.5rem", background: "#2a2a2a", textAlign: "center", fontSize: "1.1rem", borderBottom: "1px solid #444" },
   td: { padding: "0.75rem 0.5rem", textAlign: "center", fontSize: "1.1rem", borderBottom: "1px solid #333" },
-  cupoRow: {
-    padding: "0.6rem 1.25rem",
-    borderBottom: "1px solid #444",
-    display: "flex",
-    alignItems: "center",
-  },
   inputInline: {
-    flex: 1, padding: "0.6rem 0.75rem",
+    width: "90px", padding: "0.35rem 0.5rem",
     background: "#111", color: "#fff",
     border: "1px solid #666", borderRadius: "0.375rem",
-    fontSize: "1.4rem",
+    fontSize: "1rem",
   },
   inputTabla: {
     width: "90px", padding: "0.35rem 0.4rem",
@@ -216,7 +208,7 @@ const estilos = {
   },
   btnCerrarX: { background: "none", border: "none", color: "#aaa", fontSize: "1.3rem", cursor: "pointer" },
   btnCerrar: { background: "transparent", border: "1px solid #666", color: "#aaa", padding: "0.5rem 1.25rem", fontSize: "1rem", borderRadius: "0.375rem", cursor: "pointer" },
-  btnCupo: { background: "transparent", border: "1px solid #666", color: "#fff", padding: "0.5rem 1rem", fontSize: "1.1rem", borderRadius: "0.375rem", cursor: "pointer" },
+  btnCupo: { background: "transparent", border: "1px solid #666", color: "#fff", padding: "0.25rem 0.6rem", fontSize: "0.95rem", borderRadius: "0.375rem", cursor: "pointer" },
   btnVerde: { background: "transparent", border: "1px solid #7ec8a0", color: "#7ec8a0", padding: "0.35rem 0.6rem", fontSize: "1rem", borderRadius: "0.375rem", cursor: "pointer" },
   btnGris: { background: "transparent", border: "1px solid #666", color: "#aaa", padding: "0.35rem 0.6rem", fontSize: "1rem", borderRadius: "0.375rem", cursor: "pointer" },
   btnRojo: { background: "transparent", border: "none", cursor: "pointer", fontSize: "1.2rem" },
