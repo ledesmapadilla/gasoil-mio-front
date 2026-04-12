@@ -52,12 +52,20 @@ const MesModal = ({ show, onHide, mes, anio, cargas, modoEditar, cupo, onEditarC
     });
     if (!isConfirmed) return;
     const resp = await borrarCarga(id);
-    if (resp?.ok) { onActualizar(); onHide(); }
+    if (resp?.ok) {
+      onActualizar();
+      onHide();
+    } else {
+      Swal.fire({ title: "Error al borrar", icon: "error", customClass: { popup: "swal-dark" }, confirmButtonText: "OK" });
+    }
   };
 
   const guardarCupo = () => {
     const n = parseInt(cupoEditando);
-    if (!n || n <= 0) return;
+    if (!n || n <= 0) {
+      Swal.fire({ title: "Valor inválido", icon: "error", customClass: { popup: "swal-dark" }, confirmButtonText: "OK" });
+      return;
+    }
     onEditarCupo(n);
     setEditandoCupo(false);
     onHide();
@@ -76,8 +84,9 @@ const MesModal = ({ show, onHide, mes, anio, cargas, modoEditar, cupo, onEditarC
                 <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
                   <span style={{ fontSize: "0.8rem" }}>Cupo:</span>
                   <input
-                    type="number"
+                    type="text"
                     inputMode="numeric"
+                    autoFocus
                     value={cupoEditando}
                     onChange={(e) => setCupoEditando(e.target.value)}
                     onKeyDown={(e) => { if (e.key === "Enter") guardarCupo(); if (e.key === "Escape") setEditandoCupo(false); }}
