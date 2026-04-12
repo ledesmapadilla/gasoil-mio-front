@@ -3,35 +3,32 @@ import { listarCargas } from "../helpers/queriesCargas";
 import CargaModal from "./CargaModal";
 import MesModal from "./MesModal";
 import Swal from "sweetalert2";
+import { MESES } from "../constants";
 
-const MESES = [
-  "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-  "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre",
-];
+const now = new Date();
+const MES_ACTUAL = now.getMonth();
+const ANIO_ACTUAL = now.getFullYear();
 
-const formatLitros = (n) => {
-  if (n === 0) return "-";
-  return n % 1 === 0 ? String(n) : n.toFixed(1);
-};
+const formatLitros = (n) => n === 0 ? "-" : n % 1 === 0 ? String(n) : n.toFixed(1);
 
 const Inicio = () => {
   const [cargas, setCargas] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [anio, setAnio] = useState(new Date().getFullYear());
+  const [anio, setAnio] = useState(ANIO_ACTUAL);
   const [mesModal, setMesModal] = useState(null);
   const [modoEditar, setModoEditar] = useState(false);
-  const [vista, setVista] = useState("inicio"); // "inicio" | "historial"
+  const [vista, setVista] = useState("inicio");
   const [cupos, setCupos] = useState(() => {
     const s = localStorage.getItem("gasoil-cupos");
     return s ? JSON.parse(s) : {};
   });
-  const mesActual = new Date().getMonth();
-  const anioActual = new Date().getFullYear();
 
   useEffect(() => {
     document.body.style.overflow = vista === "inicio" ? "hidden" : "auto";
     return () => { document.body.style.overflow = ""; };
   }, [vista]);
+
+  useEffect(() => { cargarDatos(); }, []);
 
   const getCupo = (i) => cupos[`${anio}-${i}`] ?? 140;
 
@@ -46,8 +43,6 @@ const Inicio = () => {
     const resp = await listarCargas();
     if (resp?.ok) setCargas(await resp.json());
   };
-
-  useEffect(() => { cargarDatos(); }, []);
 
   const getCargasMes = (i) =>
     cargas.filter((c) => {
@@ -65,7 +60,7 @@ const Inicio = () => {
       title: "Seleccionar año",
       input: "number",
       inputValue: anio,
-      inputAttributes: { min: 2026, max: anioActual, step: 1 },
+      inputAttributes: { min: 2026, max: ANIO_ACTUAL, step: 1 },
       confirmButtonText: "Ver",
       showCancelButton: true,
       cancelButtonText: "Cancelar",
@@ -81,48 +76,39 @@ const Inicio = () => {
     if (!isDismissed && value) setAnio(parseInt(value));
   };
 
-  const { total: totalActual, saldo: saldoActual } = getResumen(mesActual);
+  const { total: totalActual, saldo: saldoActual } = getResumen(MES_ACTUAL);
 
   return (
     <div className="gasoil-container">
-
-      {/* ── Fila de acciones ── */}
       <div className="acciones-row">
         <button className="btn-carga" onClick={() => setShowModal(true)}>CARGA</button>
         <button className="btn-anio" onClick={cambiarAnio}>{anio}</button>
       </div>
 
-      {/* ── Vista inicio ── */}
       {vista === "inicio" && (
         <div className="inicio-body">
           <div className="mes-actual-card">
-            <div className="mac-nombre">{MESES[mesActual]}</div>
+            <div className="mac-nombre">{MESES[MES_ACTUAL]}</div>
             <div className="mac-litros">{formatLitros(totalActual)}</div>
-            <div className={`mac-saldo${saldoActual < 0 ? " saldo-negativo" : ""}`}>
-              Saldo: {saldoActual}
-            </div>
+            <div className={`mac-saldo${saldoActual < 0 ? " saldo-negativo" : ""}`}>Saldo: {saldoActual}</div>
             <div className="mes-botones" style={{ marginTop: "1rem" }}>
-              <button className="mes-btn-ver" onClick={() => { setMesModal(mesActual); setModoEditar(false); }}>👁</button>
-              <button className="mes-btn-editar" onClick={() => { setMesModal(mesActual); setModoEditar(true); }}>✏️</button>
+              <button className="mes-btn-ver" onClick={() => { setMesModal(MES_ACTUAL); setModoEditar(false); }}>👁</button>
+              <button className="mes-btn-editar" onClick={() => { setMesModal(MES_ACTUAL); setModoEditar(true); }}>✏️</button>
             </div>
           </div>
-
-          <button className="btn-historial" onClick={() => setVista("historial")}>
-            HISTORIAL
-          </button>
+          <button className="btn-historial" onClick={() => setVista("historial")}>HISTORIAL</button>
         </div>
       )}
 
-      {/* ── Vista historial ── */}
       {vista === "historial" && (
         <div>
           <button className="btn-volver" onClick={() => setVista("inicio")}>← Volver</button>
           <div className="meses-grid">
             {MESES.map((mes, i) => {
-              if (anio === anioActual && i > mesActual) return null;
+              if (anio === ANIO_ACTUAL && i > MES_ACTUAL) return null;
               const { total, saldo } = getResumen(i);
               return (
-                <div key={i} className={`mes-card${i === mesActual && anio === anioActual ? " mes-actual" : ""}`}>
+                <div key={i} className={`mes-card${i === MES_ACTUAL && anio === ANIO_ACTUAL ? " mes-actual" : ""}`}>
                   <div className="mes-nombre">{mes}</div>
                   <div className="mes-litros">{formatLitros(total)}</div>
                   <div className={`mes-saldo${saldo < 0 ? " saldo-negativo" : ""}`}>Saldo: {saldo}</div>
@@ -137,14 +123,12 @@ const Inicio = () => {
         </div>
       )}
 
-      {/* ── Modales ── */}
       {showModal && (
-        <CargaModal show onHide={() => setShowModal(false)} onGuardar={() => { setShowModal(false); cargarDatos(); }} />
+        <CargaModal onHide={() => setShowModal(false)} onGuardar={() => { setShowModal(false); cargarDatos(); }} />
       )}
 
       {mesModal !== null && (
         <MesModal
-          show
           onHide={() => setMesModal(null)}
           mes={mesModal}
           anio={anio}
