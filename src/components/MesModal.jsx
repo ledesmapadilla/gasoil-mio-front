@@ -62,7 +62,7 @@ const MesModal = ({ show, onHide, mes, anio, cargas, modoEditar, cupo, onEditarC
 
   const guardarCupo = () => {
     const n = parseInt(cupoEditando);
-    if (!n || n <= 0) {
+    if (isNaN(n) || n < 0) {
       Swal.fire({ title: "Valor inválido", icon: "error", customClass: { popup: "swal-dark" }, confirmButtonText: "OK" });
       return;
     }
