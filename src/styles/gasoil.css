@@ -41,13 +41,13 @@ body {
   font-weight: 700;
   letter-spacing: 0.1em;
   background: transparent;
-  color: var(--c-success);
-  border: 2px solid var(--c-success);
+  color: var(--c-secondary);
+  border: 2px solid var(--c-secondary);
   border-radius: 0.5rem;
   cursor: pointer;
 }
 
-.btn-carga:active { background: var(--c-success); color: #fff; }
+.btn-carga:active { background: var(--c-secondary); color: #fff; }
 
 .btn-anio {
   padding: 0.65rem 1rem;
