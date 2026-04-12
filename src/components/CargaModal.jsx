@@ -1,89 +1,69 @@
-import { Modal, Button, Form } from "react-bootstrap";
-import { useForm } from "react-hook-form";
+import { useState } from "react";
 import { crearCarga } from "../helpers/queriesCargas";
 import Swal from "sweetalert2";
 
+const hoy = () => new Date().toISOString().split("T")[0];
+
 const CargaModal = ({ show, onHide, onGuardar }) => {
-  const hoy = new Date().toISOString().split("T")[0];
+  const [fecha, setFecha] = useState(hoy());
+  const [litros, setLitros] = useState("");
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm({
-    defaultValues: { fecha: hoy, litros: "" },
-  });
+  if (!show) return null;
 
-  const onSubmit = async (data) => {
-    const resp = await crearCarga({ ...data, litros: parseFloat(data.litros) });
+  const handleGuardar = async () => {
+    const l = parseFloat(litros);
+    if (!l || l <= 0) return;
+    const resp = await crearCarga({ fecha, litros: l });
     if (resp?.ok) {
-      Swal.fire({
-        icon: "success",
-        title: "Carga registrada",
-        timer: 1200,
-        showConfirmButton: false,
-        customClass: { popup: "swal-dark" },
-      });
-      reset({ fecha: hoy, litros: "" });
+      Swal.fire({ icon: "success", title: "Carga registrada", timer: 1200, showConfirmButton: false, customClass: { popup: "swal-dark" } });
+      setLitros("");
+      setFecha(hoy());
       onGuardar();
-    } else {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "No se pudo registrar la carga",
-        customClass: { popup: "swal-dark" },
-      });
     }
   };
 
   return (
-    <Modal show={show} onHide={onHide} centered>
-      <Modal.Header closeButton className="bg-dark text-light border-secondary">
-        <Modal.Title>Nueva Carga</Modal.Title>
-      </Modal.Header>
-      <Modal.Body className="bg-dark text-light">
-        <Form onSubmit={handleSubmit(onSubmit)} id="form-carga">
-          <Form.Group className="mb-3">
-            <Form.Label>Fecha</Form.Label>
-            <Form.Control
-              type="date"
-              {...register("fecha", { required: "La fecha es obligatoria" })}
-              isInvalid={!!errors.fecha}
-            />
-            <Form.Control.Feedback type="invalid">
-              {errors.fecha?.message}
-            </Form.Control.Feedback>
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label>Litros</Form.Label>
-            <Form.Control
-              type="number"
-              step="0.1"
-              placeholder="Ej: 50"
-              autoFocus
-              {...register("litros", {
-                required: "Los litros son obligatorios",
-                min: { value: 0.1, message: "Debe ser mayor a 0" },
-              })}
-              isInvalid={!!errors.litros}
-            />
-            <Form.Control.Feedback type="invalid">
-              {errors.litros?.message}
-            </Form.Control.Feedback>
-          </Form.Group>
-        </Form>
-      </Modal.Body>
-      <Modal.Footer className="bg-dark border-secondary">
-        <Button variant="outline-secondary" onClick={onHide}>
-          Cancelar
-        </Button>
-        <Button variant="outline-success" type="submit" form="form-carga">
-          Guardar
-        </Button>
-      </Modal.Footer>
-    </Modal>
+    <div style={s.overlay} onClick={(e) => { if (e.target === e.currentTarget) onHide(); }}>
+      <div style={s.modal}>
+        <div style={s.header}>
+          <span style={s.titulo}>Nueva Carga</span>
+          <button style={s.btnX} onClick={onHide}>✕</button>
+        </div>
+        <div style={s.body}>
+          <label style={s.label}>Fecha</label>
+          <input type="date" value={fecha} onChange={(e) => setFecha(e.target.value)} style={s.input} />
+          <label style={{ ...s.label, marginTop: "0.75rem" }}>Litros</label>
+          <input
+            type="number"
+            inputMode="decimal"
+            value={litros}
+            onChange={(e) => setLitros(e.target.value)}
+            onKeyDown={(e) => { if (e.key === "Enter") handleGuardar(); }}
+            placeholder="Ej: 50"
+            style={s.input}
+          />
+        </div>
+        <div style={s.footer}>
+          <button style={s.btnCancelar} onClick={onHide}>Cancelar</button>
+          <button style={s.btnGuardar} onClick={handleGuardar}>Guardar</button>
+        </div>
+      </div>
+    </div>
   );
+};
+
+const s = {
+  overlay: { position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 9999, padding: "1rem" },
+  modal: { background: "#1e1e1e", border: "1px solid #444", borderRadius: "0.5rem", width: "100%", maxWidth: "360px", color: "#fff" },
+  header: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0.75rem 1rem", borderBottom: "1px solid #444" },
+  titulo: { fontWeight: 700, fontSize: "1.1rem" },
+  btnX: { background: "none", border: "none", color: "#aaa", fontSize: "1.1rem", cursor: "pointer" },
+  body: { padding: "1rem", display: "flex", flexDirection: "column" },
+  label: { fontSize: "0.85rem", color: "#aaa", marginBottom: "0.3rem" },
+  input: { padding: "0.5rem", background: "#111", color: "#fff", border: "1px solid #555", borderRadius: "0.375rem", fontSize: "1rem", width: "100%" },
+  footer: { display: "flex", justifyContent: "flex-end", gap: "0.5rem", padding: "0.75rem 1rem", borderTop: "1px solid #444" },
+  btnCancelar: { background: "transparent", border: "1px solid #666", color: "#aaa", padding: "0.4rem 1rem", borderRadius: "0.375rem", cursor: "pointer" },
+  btnGuardar: { background: "transparent", border: "1px solid #198754", color: "#198754", padding: "0.4rem 1rem", borderRadius: "0.375rem", cursor: "pointer", fontWeight: 600 },
 };
 
 export default CargaModal;

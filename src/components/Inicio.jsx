@@ -21,48 +21,36 @@ const Inicio = () => {
   const [mesModal, setMesModal] = useState(null);
   const [modoEditar, setModoEditar] = useState(false);
   const [cupos, setCupos] = useState(() => {
-    const stored = localStorage.getItem("gasoil-cupos");
-    return stored ? JSON.parse(stored) : {};
+    const s = localStorage.getItem("gasoil-cupos");
+    return s ? JSON.parse(s) : {};
   });
   const mesActual = new Date().getMonth();
 
-  const getCupo = (mesIndex) => cupos[`${anio}-${mesIndex}`] ?? 140;
+  const getCupo = (i) => cupos[`${anio}-${i}`] ?? 140;
 
-  const actualizarCupo = (mesIndex, nuevoCupo) => {
-    const key = `${anio}-${mesIndex}`;
-    const nuevos = { ...cupos, [key]: nuevoCupo };
+  const actualizarCupo = (i, val) => {
+    const key = `${anio}-${i}`;
+    const nuevos = { ...cupos, [key]: val };
     localStorage.setItem("gasoil-cupos", JSON.stringify(nuevos));
     setCupos(nuevos);
   };
 
   const cargarDatos = async () => {
     const resp = await listarCargas();
-    if (resp?.ok) {
-      const data = await resp.json();
-      setCargas(data);
-    }
+    if (resp?.ok) setCargas(await resp.json());
   };
 
-  useEffect(() => {
-    cargarDatos();
-  }, []);
+  useEffect(() => { cargarDatos(); }, []);
 
-  const getCargasMes = (mesIndex) =>
+  const getCargasMes = (i) =>
     cargas.filter((c) => {
-      const [anioC, mesC] = c.fecha.split("-");
-      return parseInt(anioC) === anio && parseInt(mesC) - 1 === mesIndex;
+      const [a, m] = c.fecha.split("-");
+      return parseInt(a) === anio && parseInt(m) - 1 === i;
     });
 
-  const getResumenMes = (mesIndex) => {
-    const cargasMes = getCargasMes(mesIndex);
-    const total = cargasMes.reduce((sum, c) => sum + c.litros, 0);
-    const saldo = getCupo(mesIndex) - total;
-    return { total, saldo };
-  };
-
-  const abrirMes = (i, editar) => {
-    setMesModal(i);
-    setModoEditar(editar);
+  const getResumen = (i) => {
+    const total = getCargasMes(i).reduce((s, c) => s + c.litros, 0);
+    return { total, saldo: getCupo(i) - total };
   };
 
   const cambiarAnio = async () => {
@@ -76,41 +64,27 @@ const Inicio = () => {
       cancelButtonText: "Cancelar",
       customClass: { popup: "swal-dark" },
     });
-    if (!isDismissed && value) {
-      setAnio(parseInt(value));
-    }
+    if (!isDismissed && value) setAnio(parseInt(value));
   };
 
   return (
     <div className="gasoil-container">
       <div className="acciones-row">
-        <button className="btn-carga" onClick={() => setShowModal(true)}>
-          CARGA
-        </button>
-        <button className="btn-anio" onClick={cambiarAnio}>
-          {anio}
-        </button>
+        <button className="btn-carga" onClick={() => setShowModal(true)}>CARGA</button>
+        <button className="btn-anio" onClick={cambiarAnio}>{anio}</button>
       </div>
 
       <div className="meses-grid">
         {MESES.map((mes, i) => {
-          const { total, saldo } = getResumenMes(i);
-          const esActual = i === mesActual;
-          const saldoNegativo = saldo < 0;
+          const { total, saldo } = getResumen(i);
           return (
-            <div key={i} className={`mes-card${esActual ? " mes-actual" : ""}`}>
+            <div key={i} className={`mes-card${i === mesActual ? " mes-actual" : ""}`}>
               <div className="mes-nombre">{mes}</div>
               <div className="mes-litros">{formatLitros(total)}</div>
-              <div className={`mes-saldo${saldoNegativo ? " saldo-negativo" : ""}`}>
-                Saldo: {saldo}
-              </div>
+              <div className={`mes-saldo${saldo < 0 ? " saldo-negativo" : ""}`}>Saldo: {saldo}</div>
               <div className="mes-botones">
-                <button className="mes-btn-ver" onClick={() => abrirMes(i, false)}>
-                  <i className="bi bi-eye"></i>
-                </button>
-                <button className="mes-btn-editar" onClick={() => abrirMes(i, true)}>
-                  <i className="bi bi-pencil"></i>
-                </button>
+                <button className="mes-btn-ver" onClick={() => { setMesModal(i); setModoEditar(false); }}>👁</button>
+                <button className="mes-btn-editar" onClick={() => { setMesModal(i); setModoEditar(true); }}>✏️</button>
               </div>
             </div>
           );
@@ -118,26 +92,19 @@ const Inicio = () => {
       </div>
 
       {showModal && (
-        <CargaModal
-          show={showModal}
-          onHide={() => setShowModal(false)}
-          onGuardar={() => {
-            setShowModal(false);
-            cargarDatos();
-          }}
-        />
+        <CargaModal show onHide={() => setShowModal(false)} onGuardar={() => { setShowModal(false); cargarDatos(); }} />
       )}
 
       {mesModal !== null && (
         <MesModal
-          show={mesModal !== null}
+          show
           onHide={() => setMesModal(null)}
           mes={mesModal}
           anio={anio}
           cargas={getCargasMes(mesModal)}
           modoEditar={modoEditar}
           cupo={getCupo(mesModal)}
-          onEditarCupo={(valor) => actualizarCupo(mesModal, valor)}
+          onEditarCupo={(val) => actualizarCupo(mesModal, val)}
           onActualizar={cargarDatos}
         />
       )}
