@@ -213,6 +213,13 @@ input[type="number"] { -moz-appearance: textfield; }
 .swal-dark .swal2-title,
 .swal-dark .swal2-html-container { color: #f8f9fa !important; }
 
+.swal-validation {
+  background: transparent !important;
+  color: var(--c-danger) !important;
+  border: none !important;
+  font-size: 0.9rem !important;
+}
+
 .swal-btn-outline-success {
   color: var(--c-success); border: 1px solid var(--c-success);
   background: transparent; padding: 0.5rem 1.5rem;

@@ -69,10 +69,12 @@ const Inicio = () => {
       confirmButtonText: "Ver",
       showCancelButton: true,
       cancelButtonText: "Cancelar",
+      inputValidator: (v) => (!v || parseInt(v) < 2026) ? "El valor debe ser mayor a 2025" : null,
       customClass: {
         popup: "swal-dark",
         confirmButton: "swal-btn-outline-success",
         cancelButton: "swal-btn-outline-secondary",
+        validationMessage: "swal-validation",
       },
       buttonsStyling: false,
     });
