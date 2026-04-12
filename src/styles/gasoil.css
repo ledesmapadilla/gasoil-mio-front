@@ -80,8 +80,8 @@ body {
 }
 
 .mac-nombre {
-  font-size: 1.1rem;
-  font-weight: 600;
+  font-size: 1.8rem;
+  font-weight: 700;
   color: var(--c-secondary);
   text-transform: uppercase;
   letter-spacing: 0.08em;
