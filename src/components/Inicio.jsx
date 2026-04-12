@@ -124,7 +124,7 @@ const Inicio = () => {
       )}
 
       {showModal && (
-        <CargaModal onHide={() => setShowModal(false)} onGuardar={() => { setShowModal(false); cargarDatos(); }} />
+        <CargaModal show={showModal} onHide={() => setShowModal(false)} onGuardar={() => { setShowModal(false); cargarDatos(); }} />
       )}
 
       {mesModal !== null && (
