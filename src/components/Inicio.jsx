@@ -26,6 +26,7 @@ const Inicio = () => {
     return s ? JSON.parse(s) : {};
   });
   const mesActual = new Date().getMonth();
+  const anioActual = new Date().getFullYear();
 
   useEffect(() => {
     document.body.style.overflow = vista === "inicio" ? "hidden" : "auto";
@@ -64,7 +65,7 @@ const Inicio = () => {
       title: "Seleccionar año",
       input: "number",
       inputValue: anio,
-      inputAttributes: { min: 2020, max: 2099, step: 1 },
+      inputAttributes: { min: 2025, max: anioActual, step: 1 },
       confirmButtonText: "Ver",
       showCancelButton: true,
       cancelButtonText: "Cancelar",
@@ -116,9 +117,10 @@ const Inicio = () => {
           <button className="btn-volver" onClick={() => setVista("inicio")}>← Volver</button>
           <div className="meses-grid">
             {MESES.map((mes, i) => {
+              if (anio === anioActual && i > mesActual) return null;
               const { total, saldo } = getResumen(i);
               return (
-                <div key={i} className={`mes-card${i === mesActual ? " mes-actual" : ""}`}>
+                <div key={i} className={`mes-card${i === mesActual && anio === anioActual ? " mes-actual" : ""}`}>
                   <div className="mes-nombre">{mes}</div>
                   <div className="mes-litros">{formatLitros(total)}</div>
                   <div className={`mes-saldo${saldo < 0 ? " saldo-negativo" : ""}`}>Saldo: {saldo}</div>
