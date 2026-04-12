@@ -209,7 +209,7 @@ const estilos = {
   btnCerrarX: { background: "none", border: "none", color: "#aaa", fontSize: "1.3rem", cursor: "pointer" },
   btnCerrar: { background: "transparent", border: "1px solid #666", color: "#aaa", padding: "0.5rem 1.25rem", fontSize: "1rem", borderRadius: "0.375rem", cursor: "pointer" },
   btnCupo: { background: "transparent", border: "1px solid #666", color: "#fff", padding: "0.25rem 0.6rem", fontSize: "0.95rem", borderRadius: "0.375rem", cursor: "pointer" },
-  btnVerde: { background: "transparent", border: "1px solid #198754", color: "#198754", padding: "0.35rem 0.6rem", fontSize: "1rem", borderRadius: "0.375rem", cursor: "pointer" },
+  btnVerde: { background: "transparent", border: "1px solid #7ec8a0", color: "#7ec8a0", padding: "0.35rem 0.6rem", fontSize: "1rem", borderRadius: "0.375rem", cursor: "pointer" },
   btnGris: { background: "transparent", border: "1px solid #666", color: "#aaa", padding: "0.35rem 0.6rem", fontSize: "1rem", borderRadius: "0.375rem", cursor: "pointer" },
   btnRojo: { background: "transparent", border: "none", cursor: "pointer", fontSize: "1.2rem" },
 };
