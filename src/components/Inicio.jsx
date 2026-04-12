@@ -65,7 +65,7 @@ const Inicio = () => {
       title: "Seleccionar año",
       input: "number",
       inputValue: anio,
-      inputAttributes: { min: 2025, max: anioActual, step: 1 },
+      inputAttributes: { min: 2026, max: anioActual, step: 1 },
       confirmButtonText: "Ver",
       showCancelButton: true,
       cancelButtonText: "Cancelar",
