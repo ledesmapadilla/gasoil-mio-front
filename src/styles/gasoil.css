@@ -59,6 +59,73 @@ body {
 
 .btn-anio:active { background: var(--c-info); color: #fff; }
 
+/* ── Vista inicio ── */
+.inicio-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding-top: 1rem;
+}
+
+.mes-actual-card {
+  background: #2a2a2a;
+  border: 2px solid var(--c-primary);
+  box-shadow: 0 0 0 1px var(--c-primary);
+  border-radius: 0.75rem;
+  padding: 2rem 2.5rem;
+  text-align: center;
+  width: 100%;
+  max-width: 340px;
+}
+
+.mac-nombre {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--c-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.75rem;
+}
+
+.mac-litros {
+  font-size: 4rem;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.mac-saldo {
+  font-size: 1rem;
+  color: var(--c-success);
+}
+
+.btn-historial {
+  width: 100%;
+  max-width: 340px;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  background: transparent;
+  color: var(--c-secondary);
+  border: 2px solid var(--c-secondary);
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.btn-historial:active { background: var(--c-secondary); color: #fff; }
+
+.btn-volver {
+  background: transparent;
+  border: none;
+  color: var(--c-info);
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0 0 1rem 0;
+  display: block;
+}
+
 /* ── Grid de meses ── */
 .meses-grid {
   display: grid;

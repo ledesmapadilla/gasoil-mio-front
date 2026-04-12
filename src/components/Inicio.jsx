@@ -20,6 +20,7 @@ const Inicio = () => {
   const [anio, setAnio] = useState(new Date().getFullYear());
   const [mesModal, setMesModal] = useState(null);
   const [modoEditar, setModoEditar] = useState(false);
+  const [vista, setVista] = useState("inicio"); // "inicio" | "historial"
   const [cupos, setCupos] = useState(() => {
     const s = localStorage.getItem("gasoil-cupos");
     return s ? JSON.parse(s) : {};
@@ -67,30 +68,62 @@ const Inicio = () => {
     if (!isDismissed && value) setAnio(parseInt(value));
   };
 
+  const { total: totalActual, saldo: saldoActual } = getResumen(mesActual);
+
   return (
     <div className="gasoil-container">
+
+      {/* ── Fila de acciones ── */}
       <div className="acciones-row">
         <button className="btn-carga" onClick={() => setShowModal(true)}>CARGA</button>
         <button className="btn-anio" onClick={cambiarAnio}>{anio}</button>
       </div>
 
-      <div className="meses-grid">
-        {MESES.map((mes, i) => {
-          const { total, saldo } = getResumen(i);
-          return (
-            <div key={i} className={`mes-card${i === mesActual ? " mes-actual" : ""}`}>
-              <div className="mes-nombre">{mes}</div>
-              <div className="mes-litros">{formatLitros(total)}</div>
-              <div className={`mes-saldo${saldo < 0 ? " saldo-negativo" : ""}`}>Saldo: {saldo}</div>
-              <div className="mes-botones">
-                <button className="mes-btn-ver" onClick={() => { setMesModal(i); setModoEditar(false); }}>👁</button>
-                <button className="mes-btn-editar" onClick={() => { setMesModal(i); setModoEditar(true); }}>✏️</button>
-              </div>
+      {/* ── Vista inicio ── */}
+      {vista === "inicio" && (
+        <div className="inicio-body">
+          <div className="mes-actual-card">
+            <div className="mac-nombre">{MESES[mesActual]}</div>
+            <div className="mac-litros">{formatLitros(totalActual)}</div>
+            <div className={`mac-saldo${saldoActual < 0 ? " saldo-negativo" : ""}`}>
+              Saldo: {saldoActual}
             </div>
-          );
-        })}
-      </div>
+            <div className="mes-botones" style={{ marginTop: "1rem" }}>
+              <button className="mes-btn-ver" onClick={() => { setMesModal(mesActual); setModoEditar(false); }}>👁</button>
+              <button className="mes-btn-editar" onClick={() => { setMesModal(mesActual); setModoEditar(true); }}>✏️</button>
+            </div>
+          </div>
 
+          <button className="btn-historial" onClick={() => setVista("historial")}>
+            HISTORIAL
+          </button>
+        </div>
+      )}
+
+      {/* ── Vista historial ── */}
+      {vista === "historial" && (
+        <div>
+          <button className="btn-volver" onClick={() => setVista("inicio")}>← Volver</button>
+          <div className="meses-grid">
+            {MESES.map((mes, i) => {
+              const { total, saldo } = getResumen(i);
+              return (
+                <div key={i} className={`mes-card${i === mesActual ? " mes-actual" : ""}`}>
+                  <div className="mes-nombre">{mes}</div>
+                  <div className="mes-litros">{formatLitros(total)}</div>
+                  <div className={`mes-saldo${saldo < 0 ? " saldo-negativo" : ""}`}>Saldo: {saldo}</div>
+                  <div className="mes-botones">
+                    <button className="mes-btn-ver" onClick={() => { setMesModal(i); setModoEditar(false); }}>👁</button>
+                    <button className="mes-btn-editar" onClick={() => { setMesModal(i); setModoEditar(true); }}>✏️</button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* ── Modales ── */}
       {showModal && (
         <CargaModal show onHide={() => setShowModal(false)} onGuardar={() => { setShowModal(false); cargarDatos(); }} />
       )}
