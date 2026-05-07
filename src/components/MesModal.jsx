@@ -121,9 +121,20 @@ const MesModal = ({ onHide, mes, anio, cargas, modoEditar, cupo, onEditarCupo, o
           )}
         </div>
 
-        <div style={e.footer}>
-          <button style={e.btnCerrar} onClick={onHide}>Cerrar</button>
-        </div>
+        {(() => {
+          const totalL = cargas.reduce((s, c) => s + c.litros, 0);
+          const saldo = cupo - totalL;
+          const totalStr = totalL % 1 === 0 ? String(totalL) : totalL.toFixed(1);
+          return (
+            <div style={e.footer}>
+              <div style={e.footerResumen}>
+                <span style={{ color: "#8899cc" }}>Total: {totalStr} L</span>
+                <span style={{ color: saldo < 0 ? "#c47a8a" : "#7ec8a0" }}>Saldo: {saldo}</span>
+              </div>
+              <button style={e.btnCerrar} onClick={onHide}>Cerrar</button>
+            </div>
+          );
+        })()}
       </div>
     </div>
   );
@@ -135,7 +146,8 @@ const e = {
   header: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0.75rem 1rem", borderBottom: "1px solid #444" },
   titulo: { fontSize: "1.3rem", fontWeight: 700 },
   body: { padding: "1rem 1.25rem", overflowY: "auto" },
-  footer: { padding: "0.75rem 1.25rem", borderTop: "1px solid #444", display: "flex", justifyContent: "flex-end" },
+  footer: { padding: "0.75rem 1.25rem", borderTop: "1px solid #444", display: "flex", justifyContent: "space-between", alignItems: "center" },
+  footerResumen: { display: "flex", gap: "1rem", fontSize: "1rem", fontWeight: 600 },
   tabla: { width: "100%", borderCollapse: "collapse" },
   th: { padding: "0.75rem 0.5rem", background: "#2a2a2a", textAlign: "center", fontSize: "1.1rem", borderBottom: "1px solid #444" },
   td: { padding: "0.75rem 0.5rem", textAlign: "center", fontSize: "1.1rem", borderBottom: "1px solid #333" },
