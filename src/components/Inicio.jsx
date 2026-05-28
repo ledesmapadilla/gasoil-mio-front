@@ -32,6 +32,21 @@ const Inicio = () => {
 
   const getCupo = (i) => cupos[`${anio}-${i}`] ?? 140;
 
+  const getTotalAnioMes = (a, i) =>
+    cargas
+      .filter((c) => {
+        const [ca, cm] = c.fecha.split("-");
+        return parseInt(ca) === a && parseInt(cm) - 1 === i;
+      })
+      .reduce((s, c) => s + c.litros, 0);
+
+  // Carry-forward desde abril 2026: cupo efectivo = base + saldo del mes anterior
+  const getCupoEfectivo = (a, i) => {
+    if (a < 2026 || (a === 2026 && i <= 3)) return cupos[`${a}-${i}`] ?? 140;
+    const [pa, pi] = i === 0 ? [a - 1, 11] : [a, i - 1];
+    return (cupos[`${a}-${i}`] ?? 140) + getCupoEfectivo(pa, pi) - getTotalAnioMes(pa, pi);
+  };
+
   const actualizarCupo = (i, val) => {
     const key = `${anio}-${i}`;
     const nuevos = { ...cupos, [key]: val };
@@ -52,7 +67,8 @@ const Inicio = () => {
 
   const getResumen = (i) => {
     const total = getCargasMes(i).reduce((s, c) => s + c.litros, 0);
-    return { total, saldo: getCupo(i) - total };
+    const cupoEf = getCupoEfectivo(anio, i);
+    return { total, saldo: cupoEf - total, cupoEfectivo: cupoEf };
   };
 
   const cambiarAnio = async () => {
@@ -135,6 +151,7 @@ const Inicio = () => {
           cargas={getCargasMes(mesModal)}
           modoEditar={modoEditar}
           cupo={getCupo(mesModal)}
+          cupoEfectivo={getCupoEfectivo(anio, mesModal)}
           onEditarCupo={(val) => actualizarCupo(mesModal, val)}
           onActualizar={cargarDatos}
         />

@@ -8,7 +8,7 @@ const formatearFecha = (fecha) => {
   return `${dia}/${mes}`;
 };
 
-const MesModal = ({ onHide, mes, anio, cargas, modoEditar, cupo, onEditarCupo, onActualizar }) => {
+const MesModal = ({ onHide, mes, anio, cargas, modoEditar, cupo, cupoEfectivo, onEditarCupo, onActualizar }) => {
   const [litrosPorId, setLitrosPorId] = useState({});
   const [editandoCupo, setEditandoCupo] = useState(false);
   const [cupoEditando, setCupoEditando] = useState("");
@@ -123,7 +123,7 @@ const MesModal = ({ onHide, mes, anio, cargas, modoEditar, cupo, onEditarCupo, o
 
         {(() => {
           const totalL = cargas.reduce((s, c) => s + c.litros, 0);
-          const saldo = cupo - totalL;
+          const saldo = (cupoEfectivo ?? cupo) - totalL;
           const totalStr = totalL % 1 === 0 ? String(totalL) : totalL.toFixed(1);
           return (
             <div style={e.footer}>
