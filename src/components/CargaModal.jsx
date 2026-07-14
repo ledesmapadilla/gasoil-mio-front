@@ -37,15 +37,14 @@ const CargaModal = ({ show, onHide, onGuardar }) => {
         <div style={s.body}>
           <label style={s.label}>Fecha</label>
           <input type="date" value={fecha} max={hoy()} onChange={(e) => setFecha(e.target.value)} style={s.input} />
-          <label style={{ ...s.label, marginTop: "0.35rem" }}>Litros</label>
+          <label style={{ ...s.label, marginTop: "0.75rem", fontSize: "1.1rem", fontWeight: "600", color: "#fff" }}>Litros</label>
           <input
             type="number"
             inputMode="decimal"
             value={litros}
             onChange={(e) => setLitros(e.target.value)}
             onKeyDown={(e) => { if (e.key === "Enter") handleGuardar(); }}
-            placeholder="Ej: 50"
-            style={s.input}
+            style={s.inputLitros}
           />
         </div>
         <div style={s.footer}>
@@ -66,6 +65,7 @@ const s = {
   body: { padding: "0.4rem 1rem", display: "flex", flexDirection: "column" },
   label: { fontSize: "1rem", color: "#aaa", marginBottom: "0.2rem" },
   input: { padding: "0.4rem", background: "#111", color: "#fff", border: "1px solid #555", borderRadius: "0.375rem", fontSize: "1.1rem", width: "100%" },
+  inputLitros: { padding: "0.75rem", background: "#111", color: "#fff", border: "2px solid #7ec8a0", borderRadius: "0.5rem", fontSize: "1.8rem", fontWeight: "bold", textAlign: "center", width: "100%", outline: "none" },
   footer: { display: "flex", justifyContent: "flex-end", gap: "0.5rem", padding: "0.35rem 1rem", borderTop: "1px solid #444" },
   btnCancelar: { background: "transparent", border: "1px solid #666", color: "#aaa", padding: "0.4rem 1rem", borderRadius: "0.375rem", cursor: "pointer" },
   btnGuardar: { background: "transparent", border: "1px solid #7ec8a0", color: "#7ec8a0", padding: "0.4rem 1rem", borderRadius: "0.375rem", cursor: "pointer", fontWeight: 600 },

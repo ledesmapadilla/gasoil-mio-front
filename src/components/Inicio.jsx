@@ -97,14 +97,22 @@ const Inicio = () => {
   return (
     <div className="gasoil-container">
       <div className="acciones-row">
-        <button className="btn-carga" onClick={() => setShowModal(true)}>CARGA</button>
-        <button className="btn-anio" onClick={cambiarAnio}>{anio}</button>
+        <div style={{ display: "flex", flexDirection: "column", flex: 1, gap: "0.25rem", alignItems: "center" }}>
+          <button className="btn-carga" style={{ width: "100%" }} onClick={() => setShowModal(true)}>CARGAR</button>
+          <span style={{ fontSize: "0.85rem", color: "var(--c-secondary)", fontWeight: "600" }}>Autorizado: {getCupo(MES_ACTUAL)} lts.</span>
+        </div>
+        <button className="btn-anio" style={{ alignSelf: "flex-start" }} onClick={cambiarAnio}>{anio}</button>
       </div>
 
       {vista === "inicio" && (
         <div className="inicio-body">
           <div className="mes-actual-card">
-            <div className="mac-nombre">{MESES[MES_ACTUAL]}</div>
+            <div className="mac-nombre">
+              {MESES[MES_ACTUAL]}
+              <div style={{ fontSize: "1rem", textTransform: "none", fontWeight: "normal", color: "#aaa", marginTop: "0.25rem" }}>
+                Aut: {getCupoEfectivo(anio, MES_ACTUAL)} lts
+              </div>
+            </div>
             <div className="mac-litros">{formatLitros(totalActual)}</div>
             <div className={`mac-saldo${saldoActual < 0 ? " saldo-negativo" : ""}`}>Saldo: {saldoActual}</div>
             <div className="mes-botones" style={{ marginTop: "1rem" }}>
@@ -125,7 +133,12 @@ const Inicio = () => {
               const { total, saldo } = getResumen(i);
               return (
                 <div key={i} className={`mes-card${i === MES_ACTUAL && anio === ANIO_ACTUAL ? " mes-actual" : ""}`}>
-                  <div className="mes-nombre">{mes}</div>
+                  <div className="mes-nombre">
+                    {mes}
+                    <div style={{ fontSize: "0.75rem", textTransform: "none", fontWeight: "normal", color: "#aaa", marginTop: "0.15rem" }}>
+                      Aut: {getCupoEfectivo(anio, i)} lts
+                    </div>
+                  </div>
                   <div className="mes-litros">{formatLitros(total)}</div>
                   <div className={`mes-saldo${saldo < 0 ? " saldo-negativo" : ""}`}>Saldo: {saldo}</div>
                   <div className="mes-botones">
