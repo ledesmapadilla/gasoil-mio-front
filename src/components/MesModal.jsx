@@ -129,7 +129,7 @@ const MesModal = ({ onHide, mes, anio, cargas, modoEditar, cupo, cupoEfectivo, o
             <div style={e.footer}>
               <div style={e.footerResumen}>
                 <span style={{ color: "#8899cc" }}>Total: {totalStr} L</span>
-                <span style={{ color: saldo < 0 ? "#c47a8a" : "#7ec8a0" }}>Saldo: {saldo}</span>
+                <span style={{ color: saldo < 0 ? "#c47a8a" : "#7ec8a0" }}>Disponible: {saldo}</span>
               </div>
               <button style={e.btnCerrar} onClick={onHide}>Cerrar</button>
             </div>

@@ -99,7 +99,7 @@ const Inicio = () => {
       <div className="acciones-row">
         <div style={{ display: "flex", flexDirection: "column", flex: 1, gap: "0.25rem", alignItems: "center" }}>
           <button className="btn-carga" style={{ width: "100%" }} onClick={() => setShowModal(true)}>CARGAR</button>
-          <span style={{ fontSize: "0.85rem", color: "var(--c-secondary)", fontWeight: "600" }}>Autorizado: {getCupo(MES_ACTUAL)} lts.</span>
+          <span style={{ fontSize: "0.85rem", color: "var(--c-secondary)", fontWeight: "600" }}>Autorizado: {getCupo(MES_ACTUAL)} lts. mensual.</span>
         </div>
         <button className="btn-anio" style={{ alignSelf: "flex-start" }} onClick={cambiarAnio}>{anio}</button>
       </div>
@@ -114,7 +114,7 @@ const Inicio = () => {
               </div>
             </div>
             <div className="mac-litros">{formatLitros(totalActual)}</div>
-            <div className={`mac-saldo${saldoActual < 0 ? " saldo-negativo" : ""}`}>Saldo: {saldoActual}</div>
+            <div className={`mac-saldo${saldoActual < 0 ? " saldo-negativo" : ""}`}>Disponible: {saldoActual}</div>
             <div className="mes-botones" style={{ marginTop: "1rem" }}>
               <button className="mes-btn-ver" onClick={() => { setMesModal(MES_ACTUAL); setModoEditar(false); }}>👁</button>
               <button className="mes-btn-editar" onClick={() => { setMesModal(MES_ACTUAL); setModoEditar(true); }}>✏️</button>
@@ -140,7 +140,7 @@ const Inicio = () => {
                     </div>
                   </div>
                   <div className="mes-litros">{formatLitros(total)}</div>
-                  <div className={`mes-saldo${saldo < 0 ? " saldo-negativo" : ""}`}>Saldo: {saldo}</div>
+                  <div className={`mes-saldo${saldo < 0 ? " saldo-negativo" : ""}`}>Disponible: {saldo}</div>
                   <div className="mes-botones">
                     <button className="mes-btn-ver" onClick={() => { setMesModal(i); setModoEditar(false); }}>👁</button>
                     <button className="mes-btn-editar" onClick={() => { setMesModal(i); setModoEditar(true); }}>✏️</button>
