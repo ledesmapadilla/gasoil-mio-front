@@ -110,11 +110,11 @@ const Inicio = () => {
             <div className="mac-nombre">
               {MESES[MES_ACTUAL]}
               <div style={{ fontSize: "1rem", textTransform: "none", fontWeight: "normal", color: "#aaa", marginTop: "0.25rem" }}>
-                Aut: {getCupoEfectivo(anio, MES_ACTUAL)} lts
+                Disponible: {getCupoEfectivo(anio, MES_ACTUAL)} lts
               </div>
             </div>
             <div className="mac-litros">{formatLitros(totalActual)}</div>
-            <div className={`mac-saldo${saldoActual < 0 ? " saldo-negativo" : ""}`}>Disponible: {saldoActual}</div>
+            <div className={`mac-saldo${saldoActual < 0 ? " saldo-negativo" : ""}`}>Saldo: {saldoActual}</div>
             <div className="mes-botones" style={{ marginTop: "1rem" }}>
               <button className="mes-btn-ver" onClick={() => { setMesModal(MES_ACTUAL); setModoEditar(false); }}>👁</button>
               <button className="mes-btn-editar" onClick={() => { setMesModal(MES_ACTUAL); setModoEditar(true); }}>✏️</button>
@@ -136,11 +136,11 @@ const Inicio = () => {
                   <div className="mes-nombre">
                     {mes}
                     <div style={{ fontSize: "0.75rem", textTransform: "none", fontWeight: "normal", color: "#aaa", marginTop: "0.15rem" }}>
-                      Aut: {getCupoEfectivo(anio, i)} lts
+                      Disponible: {getCupoEfectivo(anio, i)} lts
                     </div>
                   </div>
                   <div className="mes-litros">{formatLitros(total)}</div>
-                  <div className={`mes-saldo${saldo < 0 ? " saldo-negativo" : ""}`}>Disponible: {saldo}</div>
+                  <div className={`mes-saldo${saldo < 0 ? " saldo-negativo" : ""}`}>Saldo: {saldo}</div>
                   <div className="mes-botones">
                     <button className="mes-btn-ver" onClick={() => { setMesModal(i); setModoEditar(false); }}>👁</button>
                     <button className="mes-btn-editar" onClick={() => { setMesModal(i); setModoEditar(true); }}>✏️</button>
