@@ -12,6 +12,7 @@ const MesModal = ({ onHide, mes, anio, cargas, modoEditar, cupo, cupoEfectivo, o
   const [litrosPorId, setLitrosPorId] = useState({});
   const [editandoCupo, setEditandoCupo] = useState(false);
   const [cupoEditando, setCupoEditando] = useState("");
+  const [guardando, setGuardando] = useState(false);
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -22,13 +23,22 @@ const MesModal = ({ onHide, mes, anio, cargas, modoEditar, cupo, cupoEfectivo, o
   const setLitros = (id, val) => setLitrosPorId((prev) => ({ ...prev, [id]: val }));
 
   const guardarEditar = async (carga) => {
+    if (guardando) return;
     const litros = parseFloat(getLitros(carga));
     if (!litros || litros <= 0) return;
-    const resp = await editarCarga(carga._id, { fecha: carga.fecha, litros });
-    if (resp?.ok) { onActualizar(); onHide(); }
+    setGuardando(true);
+    try {
+      const resp = await editarCarga(carga._id, { fecha: carga.fecha, litros });
+      if (resp?.ok) { onActualizar(); onHide(); }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setGuardando(false);
+    }
   };
 
   const handleBorrar = async (id) => {
+    if (guardando) return;
     const { isConfirmed } = await Swal.fire({
       title: "¿Borrar esta carga?",
       icon: "warning",
@@ -39,11 +49,18 @@ const MesModal = ({ onHide, mes, anio, cargas, modoEditar, cupo, cupoEfectivo, o
       buttonsStyling: false,
     });
     if (!isConfirmed) return;
-    const resp = await borrarCarga(id);
-    if (resp?.ok) {
-      onActualizar(); onHide();
-    } else {
-      Swal.fire({ title: "Error al borrar", icon: "error", customClass: { popup: "swal-dark" }, confirmButtonText: "OK" });
+    setGuardando(true);
+    try {
+      const resp = await borrarCarga(id);
+      if (resp?.ok) {
+        onActualizar(); onHide();
+      } else {
+        Swal.fire({ title: "Error al borrar", icon: "error", customClass: { popup: "swal-dark" }, confirmButtonText: "OK" });
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setGuardando(false);
     }
   };
 

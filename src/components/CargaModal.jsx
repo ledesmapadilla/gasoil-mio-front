@@ -7,6 +7,7 @@ const hoy = () => new Date().toISOString().split("T")[0];
 const CargaModal = ({ show, onHide, onGuardar }) => {
   const [fecha, setFecha] = useState(hoy());
   const [litros, setLitros] = useState("");
+  const [guardando, setGuardando] = useState(false);
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -16,40 +17,63 @@ const CargaModal = ({ show, onHide, onGuardar }) => {
   if (!show) return null;
 
   const handleGuardar = async () => {
+    if (guardando) return;
     const l = parseFloat(litros);
     if (!l || l <= 0) return;
-    const resp = await crearCarga({ fecha, litros: l });
-    if (resp?.ok) {
-      Swal.fire({ icon: "success", title: "Carga registrada", timer: 1200, showConfirmButton: false, customClass: { popup: "swal-dark" } });
-      setLitros("");
-      setFecha(hoy());
-      onGuardar();
+
+    setGuardando(true);
+    try {
+      const resp = await crearCarga({ fecha, litros: l });
+      if (resp?.ok) {
+        Swal.fire({ icon: "success", title: "Carga registrada", timer: 1200, showConfirmButton: false, customClass: { popup: "swal-dark" } });
+        setLitros("");
+        setFecha(hoy());
+        onGuardar();
+      } else {
+        Swal.fire({ icon: "error", title: "Error al registrar la carga", customClass: { popup: "swal-dark" } });
+      }
+    } catch (error) {
+      console.error("Error al guardar carga:", error);
+    } finally {
+      setGuardando(false);
     }
   };
 
   return (
-    <div style={s.overlay} onClick={(e) => { if (e.target === e.currentTarget) onHide(); }}>
+    <div style={s.overlay} onClick={(e) => { if (e.target === e.currentTarget && !guardando) onHide(); }}>
       <div style={s.modal}>
         <div style={s.header}>
           <span style={s.titulo}>Nueva Carga</span>
-          <button style={s.btnX} onClick={onHide}>✕</button>
+          <button style={s.btnX} onClick={onHide} disabled={guardando}>✕</button>
         </div>
         <div style={s.body}>
           <label style={s.label}>Fecha</label>
-          <input type="date" value={fecha} max={hoy()} onChange={(e) => setFecha(e.target.value)} style={s.input} />
+          <input type="date" value={fecha} max={hoy()} onChange={(e) => setFecha(e.target.value)} style={s.input} disabled={guardando} />
           <label style={{ ...s.label, marginTop: "0.75rem", fontSize: "1.1rem", fontWeight: "600", color: "#fff" }}>Litros</label>
           <input
             type="number"
             inputMode="decimal"
             value={litros}
             onChange={(e) => setLitros(e.target.value)}
-            onKeyDown={(e) => { if (e.key === "Enter") handleGuardar(); }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                handleGuardar();
+              }
+            }}
             style={s.inputLitros}
+            disabled={guardando}
           />
         </div>
         <div style={s.footer}>
-          <button style={s.btnCancelar} onClick={onHide}>Cancelar</button>
-          <button style={s.btnGuardar} onClick={handleGuardar}>Guardar</button>
+          <button style={s.btnCancelar} onClick={onHide} disabled={guardando}>Cancelar</button>
+          <button
+            style={{ ...s.btnGuardar, opacity: guardando ? 0.6 : 1, cursor: guardando ? "not-allowed" : "pointer" }}
+            onClick={handleGuardar}
+            disabled={guardando}
+          >
+            {guardando ? "Guardando..." : "Guardar"}
+          </button>
         </div>
       </div>
     </div>
